@@ -18,9 +18,6 @@ import re
 
 from functools import total_ordering
 
-from wtforms.fields import Field
-from wtforms.widgets import Select
-
 
 @total_ordering
 class sym(object):
@@ -141,43 +138,3 @@ class CharEnum(object):
             return sorted(cls._reg.values(), key=lambda s: s.name)
 
 
-class CharEnumField(Field):
-    widget = Select()
-
-    def __init__(self, label='', validators=None, enum=None,
-            exclude=None, force_select=True, select_msg='Select...', **kw):
-        super(CharEnumField, self).__init__(label,
-            validators, **kw)
-        self.enum = enum
-        self.coerce = enum.coerce_from_string
-        self.exclude = exclude
-        self.force_select = force_select
-        self.select_msg = select_msg
-
-    def process_data(self, value):
-        try:
-            self.data = self.coerce(value)
-        except (ValueError, TypeError):
-            self.data = None
-
-    def process_formdata(self, valuelist):
-        if valuelist:
-            try:
-                self.data = self.enum.from_string(valuelist[0])
-            except ValueError:
-                raise ValueError(self.gettext
-                    (u'Invalid Choice: could not coerce')
-                )
-
-    def iter_choices(self):
-        if self.exclude is not None:
-            excluded = set(self.exclude)
-            symbols = set(self.enum.symbols()).difference(excluded)
-        else:
-            symbols = self.enum.symbols()
-        if self.force_select:
-            yield (None, self.select_msg, self.data is None)
-        for sym in symbols:
-            cond = False if self.data is None \
-                else sym.value == self.data.value
-            yield (sym.value, sym.description, cond)
