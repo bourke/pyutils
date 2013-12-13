@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from pyutils import VERSION, DEV_STATUS
 
 setup(
-    name='py-utils',
+    name='pyutils',
     version='.'.join(map(str, VERSION)),
     description='Various Python utilities for text and date handling',
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.md')).read(),
