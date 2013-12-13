@@ -6,7 +6,7 @@ setup(
     name='py-utils',
     version='.'.join(map(str, VERSION)),
     description='Various Python utilities for text and date handling',
-    long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
+    long_description=open(os.path.join(os.path.dirname(__file__), 'README.md')).read(),
     keywords='python utils dates text',
     author='Michael Bourke',
     author_email='git@elementality.com',
