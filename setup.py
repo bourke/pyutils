@@ -1,6 +1,6 @@
 import os
 from setuptools import setup, find_packages
-from flask_utils import VERSION, DEV_STATUS
+from pyutils import VERSION, DEV_STATUS
 
 setup(
     name='py-utils',
@@ -27,6 +27,8 @@ setup(
         'Programming Language :: Python :: 2',
     ],
     install_requires=[
-        'python-dateutil'
+        'python-dateutil',
+        'pytz',
+        'rfc3339'
     ],
 )
