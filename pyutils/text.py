@@ -85,9 +85,9 @@ def remove_tag(str_, tag="p"):
     return re.sub(tag_re, '', str_, re.M)
 
 
-def camelize(text):
+def camelize(text, initial_cap=True):
     text = initial_camelize(text)
-    if text:
+    if text and initial_cap:
         text = text[0].upper() + text[1:]
     return text
 
@@ -100,12 +100,12 @@ def initial_camelize(text):
         text = text[0].lower() + text[1:]
     return text
 
-def uncamelize(text):
-    def downcase(matchobj):
-        return "_" + matchobj.group(0).lower()
-    if text:
-        text = text[0].lower() + re.sub(r'([A-Z])', downcase, text[1:])
-    return text
+
+_underscorer1 = re.compile(r'(.)([A-Z][a-z]+)')
+_underscorer2 = re.compile('([a-z0-9])([A-Z])')
+def uncamelize(s):
+    subbed = _underscorer1.sub(r'\1_\2', s)
+    return _underscorer2.sub(r'\1_\2', subbed).lower()
 
 
 def underscores_as_words(text):
