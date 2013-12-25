@@ -15,7 +15,7 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     package_data={
-        'lmn_pyutils': [],
+        'lmn_pyutils': ['pyutils'],
     },
     classifiers=[
         'Development Status :: %s' % DEV_STATUS,
