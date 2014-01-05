@@ -9,6 +9,15 @@ from itertools import izip_longest
 import collections
 
 
+class classproperty(property):
+    """A decorator that behaves like @property except that operates
+    on classes rather than instances.
+
+    """
+    def __get__(desc, self, cls):
+        return desc.fget(cls)
+
+
 def last_iteritem(it):
     d = collections.deque(it, maxlen=1)
     return d.pop()
