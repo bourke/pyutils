@@ -11,6 +11,10 @@ eastern = pytz.timezone("US/Eastern")
 utc = pytz.utc
 
 
+def is_naive(dt):
+    return dt.tzinfo is None and dt.tzinfo.utcoffset(dt) is None
+
+
 def delta_seconds(td):
     return td.days * 86400 + td.seconds
 
