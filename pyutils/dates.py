@@ -1,6 +1,6 @@
 import pytz
 import re
-from rfc3339 import rfc3339
+from pyrfc3339 import generate, parse
 from calendar import monthrange, timegm
 from datetime import datetime, timedelta, date, time
 from dateutil.relativedelta import *
@@ -33,7 +33,7 @@ def utc_to_et(dt):
 
 
 def utc_fmt(dt):
-    return rfc3339(dt)
+    return generate(dt)
 
 
 _date_reg = re.compile(r'\b0(\d)')

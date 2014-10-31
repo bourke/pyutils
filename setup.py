@@ -29,6 +29,6 @@ setup(
     install_requires=[
         'python-dateutil',
         'pytz',
-        'rfc3339'
+        'pyRFC3339'
     ],
 )
