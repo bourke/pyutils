@@ -29,6 +29,7 @@ setup(
     install_requires=[
         'python-dateutil',
         'pytz',
-        'pyRFC3339'
+        'pyRFC3339',
+        'chardet'
     ],
 )
