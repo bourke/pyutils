@@ -18,6 +18,16 @@ class classproperty(property):
         return desc.fget(cls)
 
 
+def pluck(obj, *keys):
+    rv = {}
+    for k in keys:
+        try:
+            rv.update({k: obj.get(k)})
+        except:
+            continue
+    return rv
+
+
 def last_iteritem(it):
     d = collections.deque(it, maxlen=1)
     return d.pop()
