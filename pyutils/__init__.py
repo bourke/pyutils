@@ -1,4 +1,4 @@
-VERSION = (0, 3, 0)
+VERSION = (0, 3, 1)
 DEV_STATUS = '4 - Beta'
 
 from text import *
@@ -7,6 +7,26 @@ from text import *
 
 from itertools import izip_longest
 import collections
+
+
+def walkable(obj):
+    return (isinstance(obj, collections.Iterable)
+        and not isinstance(obj, basestring))
+
+
+def walk_object(obj, f=(lambda x: x)):
+    # print obj, type(obj), walkable(obj)
+    if not walkable(obj):
+        # print "call func with %s (%s)?" % (obj, type(obj))
+        obj = f(obj)
+    else:
+        if isinstance(obj, collections.Mapping):
+            it = obj.itervalues()
+        else:
+            it = iter(obj)
+        for obj in it:
+            walk(obj, f)
+    return obj
 
 
 class classproperty(property):
