@@ -25,7 +25,7 @@ def walk_object(obj, f=(lambda x: x)):
         else:
             it = iter(obj)
         for obj in it:
-            walk(obj, f)
+            walk_object(obj, f)
     return obj
 
 
