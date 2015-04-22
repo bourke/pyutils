@@ -1,12 +1,13 @@
-VERSION = (0, 3, 1)
+VERSION = (0, 3, 5)
 DEV_STATUS = '4 - Beta'
 
 from text import *
 # (c) 2005 Ian Bicking and contributors; written for Paste (http://pythonpaste.org)
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-from itertools import izip_longest
+from itertools import izip, izip_longest, tee
 import collections
+from functools import wraps
 
 
 def walkable(obj):
@@ -27,6 +28,24 @@ def walk_object(obj, f=(lambda x: x)):
         for obj in it:
             walk_object(obj, f)
     return obj
+
+
+class hybridmethod(object):
+    def __init__(self, func):
+        self.func = func
+
+    def __get__(self, obj, cls):
+        context = obj if obj is not None else cls
+
+        @wraps(self.func)
+        def hybrid(*args, **kw):
+            return self.func(context, *args, **kw)
+
+        # optional, mimic methods some more
+        hybrid.__func__ = hybrid.im_func = self.func
+        hybrid.__self__ = hybrid.im_self = context
+
+        return hybrid
 
 
 class classproperty(property):
@@ -124,12 +143,15 @@ def divide_seq(seq, divisor):
     return [[i for i in t[0 + j:stop + j]] for j in range(0, len(t), stop)]
 
 
-def group_seq(iterable, n, fillvalue=None):
+def group_seq(iterable, n, fill=True, fillvalue=None):
     """Group a sequence into <n> subsequences:
        grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx
     """
     args = [iter(iterable)] * n
-    return izip_longest(fillvalue=fillvalue, *args)
+    if fill:
+        return izip_longest(fillvalue=fillvalue, *args)
+    else:
+        return izip(*args)
 
 
 def pairwise(iterable):
@@ -147,4 +169,26 @@ def flatten(l):
                 yield sub
         else:
             yield el
+
+
+class OrderedDefaultdict(collections.OrderedDict):
+    def __init__(self, *args, **kwargs):
+        if not args:
+            self.default_factory = None
+        else:
+            if not (args[0] is None or callable(args[0])):
+                raise TypeError('first argument must be callable or None')
+            self.default_factory = args[0]
+            args = args[1:]
+        super(OrderedDefaultdict, self).__init__(*args, **kwargs)
+
+    def __missing__ (self, key):
+        if self.default_factory is None:
+            raise KeyError(key)
+        self[key] = default = self.default_factory()
+        return default
+
+    def __reduce__(self):  # optional, for pickle support
+        args = (self.default_factory,) if self.default_factory else ()
+        return self.__class__, args, None, None, self.iteritems()
 

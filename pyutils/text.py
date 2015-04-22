@@ -33,7 +33,7 @@ def plural(term, ct, include_count=True, preserve_singular=True):
         return result + (suffix(term))
 
 
-def pluralize(term, ct):
+def pluralize(term, ct=None):
     """
     Convenience function for simple pluralization.
     """
