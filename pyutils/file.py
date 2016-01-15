@@ -11,6 +11,8 @@ import sys
 @contextlib.contextmanager
 def open_or_stdout(filename=None):
     if filename and filename != '-':
+        if not isinstance(filename, basestring):
+            filename = filename.name
         fh = codecs.open(filename, 'w', encoding='utf-8')
     else:
         fh = sys.stdout
