@@ -8,6 +8,24 @@ import contextlib
 import codecs
 import sys
 
+
+# here's some python 2/3 enjoyment
+try:
+    unicode = unicode
+except NameError:
+    # 'unicode' is undefined, must be Python 3
+    str = str
+    unicode = str
+    bytes = bytes
+    basestring = (str, bytes)
+else:
+    # 'unicode' exists, must be Python 2
+    str = str
+    unicode = unicode
+    bytes = str
+    basestring = basestring
+
+
 @contextlib.contextmanager
 def open_or_stdout(filename=None):
     if filename and filename != '-':

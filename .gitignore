@@ -10,3 +10,4 @@ static/.sass-cache/
 !static/js/lib
 config.yaml
 test_config.yaml
+*.egg-info
