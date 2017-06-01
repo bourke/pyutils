@@ -1,11 +1,19 @@
-VERSION = (0, 3, 5)
+from __future__ import print_function
+from __future__ import absolute_import
+
+VERSION = (0, 4, 0)
 DEV_STATUS = '4 - Beta'
 
-from text import *
+from .text import *
 # (c) 2005 Ian Bicking and contributors; written for Paste (http://pythonpaste.org)
 # Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
-from itertools import izip, izip_longest, tee
+try:
+    from itertools import izip as zip, izip_longest as zip_longest, tee
+except ImportError:
+    from itertools import zip_longest, tee
+
+
 import collections
 from functools import wraps
 
@@ -149,16 +157,16 @@ def group_seq(iterable, n, fill=True, fillvalue=None):
     """
     args = [iter(iterable)] * n
     if fill:
-        return izip_longest(fillvalue=fillvalue, *args)
+        return zip_longest(fillvalue=fillvalue, *args)
     else:
-        return izip(*args)
+        return zip(*args)
 
 
 def pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     a, b = tee(iterable)
     next(b, None)
-    return izip(a, b)
+    return zip(a, b)
 
 
 def flatten(l):
